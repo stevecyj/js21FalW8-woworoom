@@ -1,5 +1,9 @@
 let productData = [];
-// get products
+
+/**
+ * get products
+ */
+
 function getData() {
   axios
     .get(`${baseUrl}/customer/${api_path}/products`)
