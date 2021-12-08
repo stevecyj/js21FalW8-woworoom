@@ -106,13 +106,13 @@ function renderCartList() {
         <td>NT$${price}</td>
         <td>
           <div class="d-flex align-items-center justify-content-space-around">
-            <span class="material-icons cart-icon" data-js="minus" data-cartid="${item.id}">
+            <span class="material-icons cart-icon" data-action="minus" data-count="remove" data-cartid="${item.id}">
               remove
             </span>
             <span>
               ${item.quantity}
             </span>
-            <span class="material-icons cart-icon" data-js="minus" data-cartid="${item.id}">
+            <span class="material-icons cart-icon" data-action="plus" data-count="add" data-cartid="${item.id}">
               add
             </span>
           </div>
@@ -128,6 +128,18 @@ function renderCartList() {
   shoppingCartList.innerHTML = cartsListStr;
   totalAmount.innerHTML = `NT$${finalTotal}`;
 }
+
+/**
+ * event listener for click
+ */
+
+function orderCart(e) {
+  e.preventDefault();
+  const action = e.target.getAttribute("data-action");
+  console.log(action);
+}
+
+shoppingCartTable.addEventListener("click", orderCart);
 
 /**
  * initial
