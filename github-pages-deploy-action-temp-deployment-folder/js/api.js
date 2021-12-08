@@ -25,3 +25,21 @@ function getProductsData() {
       console.log(error.response);
     });
 }
+
+/**
+ * get cart list
+ */
+
+function getCartList() {
+  const url = `${baseUrl}/customer/${api_path}/carts`;
+  axios
+    .get(url)
+    .then((res) => {
+      cartListData = res.data;
+      console.log(cartListData);
+      renderCartList();
+    })
+    .catch((err) => {
+      console.log(error.response);
+    });
+}

@@ -11,26 +11,6 @@ const productSelect = document.querySelector("#productSelect"); // dropdown sele
 let productsData = [];
 
 /**
- * get products
- */
-
-function getProductsData() {
-  axios
-    .get(`${baseUrl}/customer/${api_path}/products`)
-    .then(function (res) {
-      productsData = res.data.products;
-      // console.log(productsData);
-      renderProducts(productsData);
-      renderOptions(productsData);
-    })
-    .catch(function (error) {
-      console.log(error.response);
-    });
-}
-
-// window.onload = getProductData();
-
-/**
  * 千分位
  */
 
