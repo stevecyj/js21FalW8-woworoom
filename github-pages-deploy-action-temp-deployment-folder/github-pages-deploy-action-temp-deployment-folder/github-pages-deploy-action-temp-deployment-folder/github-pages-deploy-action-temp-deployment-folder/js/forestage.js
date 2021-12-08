@@ -2,9 +2,8 @@
  * DOM
  */
 
-// product list
-const productsWrap = document.querySelector("#productWrap");
-
+const productsWrap = document.querySelector("#productWrap"); // product list
+const productSelect = document.querySelector("#productSelect"); // dropdown select
 /**
  * data
  */
@@ -22,6 +21,7 @@ function getProductsData() {
       productsData = res.data.products;
       // console.log(productsData);
       renderProducts(productsData);
+      renderOptions(productsData);
     })
     .catch(function (error) {
       console.log(error.response);
@@ -61,6 +61,41 @@ function renderProducts(data) {
     </li>`;
   });
   productsWrap.innerHTML = cardStr;
+}
+
+// render options
+function renderOptions(data) {
+  let selectBeforeStr = `<option value="全部" selected>全部</option>`;
+  let selectItemStr = ``;
+  let arr = [];
+  data.forEach((item) => {
+    arr.push(item.category);
+  });
+  let arrSet = new Set(arr);
+  arr = [...arrSet];
+  // console.log(arrSet, arr);
+  arr.forEach((item) => {
+    selectItemStr += `<option value="${item}">${item}</option>`;
+  });
+  let selectStr = selectBeforeStr + selectItemStr;
+  productSelect.innerHTML = selectStr;
+}
+
+/**
+ * search filter
+ */
+
+function searchFilter(selected) {
+  let value = selected.value;
+  if (value === "全部") {
+    renderProducts(productsData);
+  } else {
+    let selectResult = productsData.filter((item) => {
+      return item.category === value;
+    });
+    // console.log(selectResult);
+    renderProducts(selectResult);
+  }
 }
 
 /**
