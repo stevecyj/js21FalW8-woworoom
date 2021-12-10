@@ -173,7 +173,19 @@ function minusCart(cartId) {
   });
 }
 
-function plusCart(cartId) {}
+function plusCart(cartId) {
+  cartListData.carts.forEach((item) => {
+    if (item.id === cartId) {
+      let calcConfig = {
+        data: {
+          id: cartId,
+          quantity: item.quantity + 1,
+        },
+      };
+      calcCartListItemCount(calcConfig);
+    }
+  });
+}
 
 function removeCart(cartId) {}
 

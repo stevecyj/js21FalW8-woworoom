@@ -39,7 +39,7 @@ function renderProducts(data) {
     <li class="productCard">
       <h4 class="productType">新品</h4>
       <img src="${item.images}" alt="">
-      <a href="" class="addCart" data-productId=${item.id}>加入購物車</a>
+      <a href="#" class="addCart" id="addCart" data-productId=${item.id}>加入購物車</a>
       <h3 class="titleOverFlow">${item.title}</h3>
       <del class="originPrice">NT$${originPrice}</del>
       <p class="nowPrice">NT$${price}</p>
@@ -130,7 +130,7 @@ function renderCartList() {
 }
 
 /**
- * event listener for click
+ * count action for cart items
  */
 
 function actionCart(e) {
@@ -189,7 +189,52 @@ function plusCart(cartId) {
 
 function removeCart(cartId) {}
 
+/**
+ * add items to cart
+ */
+
+function addCartItem(e) {
+  e.preventDefault();
+  const productId = e.target.getAttribute("data-productId");
+
+  // 檢查加入購物車的商品是否已在購物車內
+  let existProduct = false;
+  cartListData.carts.forEach((item) => {
+    if (item.product.id === productId) {
+      existProduct = true;
+    }
+  });
+
+  // 商品存在
+  if (existProduct) {
+    cartListData.carts.forEach((item) => {
+      if (item.product.id === productId) {
+        let addConfig = {
+          data: {
+            productId: item.product.id,
+            quantity: item.quantity + 1,
+          },
+        };
+        addProductToCart(addConfig);
+      }
+    });
+    // 商品不存在
+  } else {
+    let addConfig = {
+      data: {
+        productId: productId,
+        quantity: 1,
+      },
+    };
+    addProductToCart(addConfig);
+  }
+}
+
+/**
+ * event listener for click
+ */
 shoppingCartTable.addEventListener("click", actionCart);
+productsWrap.addEventListener("click", addCartItem);
 
 /**
  * initial
