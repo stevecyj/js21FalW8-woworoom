@@ -13,9 +13,6 @@
 .d-flex {
   display: flex;
 }
-.justify-content-space-around {
-  justify-content: space-around;
-}
 .align-items-center {
   align-items: center;
 }
@@ -65,7 +62,4 @@
 .cart-alert:hover {
   color: #301e5f;
   /* text-decoration: underline; */
-}
-.overflowWrap {
-  overflow-x: scroll;
 }
