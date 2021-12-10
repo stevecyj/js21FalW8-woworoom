@@ -48,7 +48,7 @@ function getCartList() {
  * calc cart list item count
  */
 
-function calcCartListItemCount() {
+function calcCartListItemCount(calcConfig) {
   const url = `${baseUrl}/customer/${api_path}/carts`;
   axios
     .patch(url, calcConfig)
