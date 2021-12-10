@@ -99,3 +99,22 @@ function delProductFromCart(cartId) {
       console.log(err);
     });
 }
+
+/**
+ * delete all product from cart
+ */
+
+function deleteAll() {
+  const url = `${baseUrl}/customer/${api_path}/carts`;
+
+  axios
+    .delete(url)
+    .then((res) => {
+      cartListData = res.data;
+      // console.log(cartListData);
+      renderCartList();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}

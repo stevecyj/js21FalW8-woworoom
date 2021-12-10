@@ -61,3 +61,22 @@ function calcCartListItemCount(calcConfig) {
       console.log(err);
     });
 }
+
+/**
+ * add product to cart
+ */
+
+function addProductToCart(addConfig) {
+  const url = `${baseUrl}/customer/${api_path}/carts`;
+
+  axios
+    .post(url, addConfig)
+    .then((res) => {
+      cartListData = res.data;
+      console.log(cartListData);
+      // renderCartList();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
