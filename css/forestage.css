@@ -801,4 +801,17 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.cart-status {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  color: #6a33f8;
+  text-decoration: none;
+  font-size: 24px;
+}
+.cart-status:hover {
+  color: #9d7eeb;
+  /* text-decoration: underline; */
+}
 /*# sourceMappingURL=all.css.map */
