@@ -4,11 +4,16 @@
 
 const productsWrap = document.querySelector("#productWrap"); // product list
 const productSelect = document.querySelector("#productSelect"); // dropdown select
+const shoppingCartTable = document.querySelector("#shoppingCart-table"); // cart table
+const shoppingCartList = document.querySelector("#shoppingCartList"); // cart list
+const totalAmount = document.querySelector("#totalAmount"); // total amount
+
 /**
  * data
  */
 
 let productsData = [];
+let cartListData = {};
 
 /**
  * 千分位
@@ -79,6 +84,39 @@ function searchFilter(selected) {
 }
 
 /**
+ * render cart list
+ */
+
+function renderCartList() {
+  let carts = cartListData.carts;
+  let cartsListStr = ``;
+
+  carts.forEach((item) => {
+    let price = toThousandComma(item.product.price);
+    let amount = toThousandComma(item.product.price * item.quantity);
+    cartsListStr += `
+    <tr>
+        <td>
+          <div class="cardItem-title">
+            <img src="${item.product.images}" alt="產品照片" />
+            <p>${item.product.title}</p>
+          </div>
+        </td>
+        <td>NT$${price}</td>
+        <td>${item.quantity}</td>
+        <td>NT$${amount}</td>
+        <td class="discardBtn">
+          <a href="#" class="material-icons"> clear </a>
+        </td>
+    </tr>
+    `;
+  });
+
+  shoppingCartList.innerHTML = cartsListStr;
+}
+
+/**
  * initial
  */
 getProductsData();
+getCartList();

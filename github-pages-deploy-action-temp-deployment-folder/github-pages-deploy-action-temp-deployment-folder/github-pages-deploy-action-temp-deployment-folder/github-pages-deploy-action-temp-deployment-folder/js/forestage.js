@@ -119,7 +119,7 @@ function renderCartList() {
         </td>
         <td>NT$${amount}</td>
         <td class="discardBtn">
-          <a href="#" class="material-icons"> clear </a>
+          <a href="#" class="material-icons" data-action="remove" data-cartid="${item.id}"> clear </a>
         </td>
     </tr>
     `;
@@ -187,7 +187,9 @@ function plusCart(cartId) {
   });
 }
 
-function removeCart(cartId) {}
+function removeCart(cartId) {
+  delProductFromCart(cartId);
+}
 
 /**
  * add items to cart

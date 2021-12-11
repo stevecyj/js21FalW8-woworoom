@@ -9,12 +9,47 @@ const shoppingCartList = document.querySelector("#shoppingCartList"); // cart li
 const totalAmount = document.querySelector("#totalAmount"); // total amount
 const discardAllBtn = document.querySelector("#discardAllBtn"); // button to discard all products
 
+// order from
+const orderInfoBtn = document.querySelector("#orderInfoBtn"); // submit button
+const orderInfos = document.querySelectorAll(
+  "input[name],select[data=payment]"
+);
+const orderInfoForm = document.querySelector("#orderInfoForm");
+
 /**
  * data
  */
 
 let productsData = [];
 let cartListData = {};
+
+/**
+ * sweet alert
+ */
+
+function showSuccess(msg) {
+  Swal.fire({
+    title: msg,
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500,
+  });
+}
+
+function showConfirm(str) {
+  return Swal.fire({
+    title: "確定送出訂單嗎？",
+    icon: "info",
+    showCancelButton: true,
+    confirmButtonText: `確認送出`,
+    cancelButtonText: `取消`,
+    confirmButtonColor: "#6A33F8",
+    html: str,
+  });
+}
+function callback() {
+  console.log("here");
+}
 
 /**
  * 千分位
@@ -248,6 +283,163 @@ function removeAllCart(e) {
 shoppingCartTable.addEventListener("click", actionCart);
 productsWrap.addEventListener("click", addCartItem);
 discardAllBtn.addEventListener("click", removeAllCart);
+orderInfoBtn.addEventListener("click", bindCheck); // form validation
+
+/**
+ * form validation
+ */
+
+const constraints = {
+  姓名: {
+    presence: {
+      allowEmpty: false,
+      message: "^必填",
+    },
+  },
+  電話: {
+    presence: {
+      allowEmpty: false,
+      message: "^必填",
+    },
+    length: {
+      minimum: 8,
+      message: "^需超過 8 碼",
+    },
+  },
+  Email: {
+    presence: {
+      allowEmpty: false,
+      message: "^必填",
+    },
+    email: {
+      message: "^Email 格式錯誤",
+    },
+  },
+  寄送地址: {
+    presence: {
+      allowEmpty: false,
+      message: "^必填",
+    },
+  },
+};
+
+function bindCheck() {
+  if (cartListData.carts == undefined || cartListData.carts.length === 0) {
+    alert("購物車內沒有商品");
+  } else {
+    const tradeWay = document.querySelector("#tradeWay");
+    let dataArr = [];
+
+    orderInfos.forEach((item) => {
+      dataArr.push(item.value);
+      item.nextElementSibling.textContent = "";
+    });
+
+    let errors = validate(orderInfoForm, constraints) || "";
+    if (errors) {
+      Object.keys(errors).forEach((item) => {
+        document.querySelector(`[data-message="${item}"]`).textContent =
+          errors[item];
+      });
+      showErrors();
+    } else if (errors === "") {
+      dataArr.push(tradeWay.value);
+      // console.log(dataArr);
+      createOrder(dataArr);
+    }
+  }
+}
+
+// 顯示錯誤訊息
+function showErrors() {
+  orderInfos.forEach((item) => {
+    item.addEventListener("change", () => {
+      item.nextElementSibling.textContent = "";
+      let errors = validate(orderInfoForm, constraints) || "";
+      if (errors) {
+        Object.keys(errors).forEach((keys) => {
+          document.querySelector(`[data-message="${keys}"]`).textContent =
+            errors[keys];
+        });
+      }
+    });
+  });
+}
+
+// submit order
+async function createOrder(dataArr) {
+  // 客戶資料
+  let userData = {
+    name: dataArr[0],
+    tel: dataArr[1],
+    email: dataArr[2],
+    address: dataArr[3],
+    payment: dataArr[4],
+  };
+
+  let str = `
+  <table class="order-table">
+  <tr>
+    <th>姓名：</th>
+    <td>${userData.name}</td>
+  </tr>
+  <tr>
+    <th>電話：</th>
+    <td>${userData.tel}</td>
+  </tr>
+  <tr>
+    <th>Email：</th>
+    <td>${userData.email}</td>
+  </tr>
+  <tr>
+    <th>寄送地址：</th>
+    <td>${userData.address}</td>
+  </tr>
+  <tr>
+    <th>交易方式：</th>
+    <td>${userData.payment}</td>
+  </tr>
+  </table>
+  `;
+
+  // console.log(userData);
+  try {
+    let res = await showConfirm(str);
+    console.log(res);
+  } catch (err) {}
+
+  // Swal.fire({
+  //   title: "確定送出訂單嗎？",
+  //   icon: "info",
+  //   showCancelButton: true,
+  //   confirmButtonText: `確認送出`,
+  //   cancelButtonText: `取消`,
+  //   confirmButtonColor: "#6A33F8",
+  //   html: str,
+  // }).then((result) => {
+  //   if (result.isConfirmed) {
+  //     const url = `${baseUrl}/customer/${api_path}/orders`;
+  //     const obj = {
+  //       data: {
+  //         user: {
+  //           ...userData,
+  //         },
+  //       },
+  //     };
+  //     axios
+  //       .post(url, obj)
+  //       .then((res) => {
+  //         // 刷新購物車
+  //         getCartList();
+  //         showSuccess("成功送出訂單！");
+  //         orderInfoForm.reset();
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // });
+}
 
 /**
  * initial

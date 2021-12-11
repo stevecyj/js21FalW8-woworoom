@@ -73,8 +73,27 @@ function addProductToCart(addConfig) {
     .post(url, addConfig)
     .then((res) => {
       cartListData = res.data;
-      console.log(cartListData);
-      // renderCartList();
+      // console.log(cartListData);
+      renderCartList();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+/**
+ * delete product from cart
+ */
+
+function delProductFromCart(cartId) {
+  const url = `${baseUrl}/customer/${api_path}/carts/${cartId}`;
+
+  axios
+    .delete(url)
+    .then((res) => {
+      cartListData = res.data;
+      // console.log(cartListData);
+      renderCartList();
     })
     .catch((err) => {
       console.log(err);
