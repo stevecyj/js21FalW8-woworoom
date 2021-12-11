@@ -74,10 +74,13 @@ function addProductToCart(addConfig) {
     .then((res) => {
       cartListData = res.data;
       // console.log(cartListData);
+      // console.log(res);
       renderCartList();
+      showSuccess("成功加入購物車！");
     })
     .catch((err) => {
       console.log(err);
+      showError(err);
     });
 }
 
@@ -94,9 +97,11 @@ function delProductFromCart(cartId) {
       cartListData = res.data;
       // console.log(cartListData);
       renderCartList();
+      showSuccess("成功刪除商品！");
     })
     .catch((err) => {
       console.log(err);
+      showError(err);
     });
 }
 
@@ -113,9 +118,11 @@ function deleteAll() {
       cartListData = res.data;
       // console.log(cartListData);
       renderCartList();
+      showSuccess("成功清空購物車！");
     })
     .catch((err) => {
       console.log(err);
+      showError(err);
     });
 }
 
