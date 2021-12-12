@@ -5,6 +5,7 @@
 const orderBody = document.querySelector("#orderBody");
 const orderInfo = document.querySelector("#orderInfo");
 const orderPageTable = document.querySelector(".orderPage-table");
+const discardAllBtn = document.querySelector("#discardAllBtn");
 
 // order data
 let ordersData = [];
@@ -110,9 +111,9 @@ function renderC3() {
       columns.push(["其他", othersPrice]);
     }
 
-    let colorsArr = ["#301E5F", "#5434A7", "#9D7FEA", "#DACBFF"];
+    let colorsArr = ["#89B5AF", "#96C7C1", "#DED9C4", "#D0CAB2"];
     let colorsObj = {};
-    // 製作出圖表，賣最多的品項顏色最深，「其他」是雜項的集合所以顏色最淺
+    // 圖表色票
     columns.forEach((item, index) => {
       if (colorsObj[item[0]] === undefined) {
         colorsObj[item[0]] = colorsArr[index];
@@ -185,6 +186,117 @@ function renderOrder() {
   renderC3();
 }
 
+// 監聽事件：監聽產品列表點擊到的元素來選擇觸發的事件
+function doSomething(e) {
+  e.preventDefault();
+
+  const targetClass = e.target.getAttribute("class");
+  const orderId = e.target.getAttribute("data-id");
+  const orderState = e.target.getAttribute("data-state");
+
+  if (
+    targetClass !== "orderStatus-Btn" &&
+    targetClass !== "delSingleOrder-Btn"
+  ) {
+    return;
+  }
+
+  if (targetClass === "orderStatus-Btn") {
+    editOrder(orderState, orderId);
+  } else if (targetClass === "delSingleOrder-Btn") {
+    deleteOrderItem(orderId);
+  }
+}
+
+// action PUT change order status
+function editOrder(orderState, orderId) {
+  // 型別轉換
+  if (orderState === "false") {
+    orderState = false;
+  } else if (orderState === "true") {
+    orderState = true;
+  }
+  apiChangeOrderStatus(orderState, orderId);
+}
+
+//action DELETE 刪除特定訂單
+function deleteOrderItem(orderId) {
+  Swal.fire({
+    confirmButtonColor: "#6A33F8",
+    cancelButtonText: "取消",
+    showCancelButton: true,
+    title: "確定要刪除該訂單嗎？",
+    confirmButtonText: `確定`,
+    icon: "warning",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = `${apiPath}/admin/${myPath}/orders/${orderId}`;
+      axios
+        .delete(url, config)
+        .then((res) => {
+          ordersData = res.data.orders;
+          renderOrder();
+          Swal.fire({
+            showConfirmButton: false,
+            timer: 1500,
+            title: "已刪除訂單！",
+            icon: "success",
+          });
+        })
+        .catch((err) => {
+          showError(err);
+        });
+    }
+  });
+}
+
+//action DELETE 刪除全部訂單
+function deleteAllOrder(e) {
+  e.preventDefault();
+  if (ordersData.length === 0) {
+    Swal.fire({
+      title: "目前沒有訂單！",
+      icon: "warning",
+    });
+  } else {
+    Swal.fire({
+      confirmButtonText: `確定`,
+      title: "確定要刪除所有訂單嗎？",
+      showCancelButton: true,
+      cancelButtonText: "取消",
+      icon: "warning",
+      confirmButtonColor: "#6A33F8",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const url = `${apiPath}/admin/${myPath}/orders`;
+        axios
+          .delete(url, config)
+          .then((res) => {
+            if (res.data.status) {
+              Swal.fire({
+                title: `${res.data.message}`,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              ordersData = res.data.orders;
+              renderOrder();
+            }
+          })
+          .catch((err) => {
+            showError(err);
+          });
+      }
+    });
+  }
+}
+
+// event listener
+discardAllBtn.addEventListener("click", deleteAllOrder);
+orderBody.addEventListener("click", doSomething);
+
+getOrderList();
+
 // let chart = c3.generate({
 //   bindto: "#chart", // HTML 元素綁定
 //   data: {
@@ -203,7 +315,5 @@ function renderOrder() {
 //     },
 //   },
 // });
-
-getOrderList();
 // console.log("123");
 // console.log(orderBody);
