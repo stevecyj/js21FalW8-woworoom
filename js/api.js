@@ -146,3 +146,44 @@ function submitOrder(orderConfig) {
       console.log(err);
     });
 }
+
+/**
+ * backstage
+ * get orders
+ */
+
+// get orderList
+function getOrderList() {
+  const url = `${baseUrl}/admin/${api_path}/orders`;
+  axios
+    .get(url, config)
+    .then((res) => {
+      ordersData = res.data.orders;
+      console.log(ordersData);
+      renderOrder();
+    })
+    .catch((err) => {
+      showError(err);
+      // console.log(err.response);
+    });
+}
+
+// milliseconds to date
+function calcOrderDay(num) {
+  num = num * 1000;
+  let date = new Date(num);
+
+  let yearStr = date.getFullYear();
+  let monthStr = date.getMonth() + 1;
+  let dateStr = date.getDate();
+
+  if (monthStr < 10) {
+    monthStr = "0" + monthStr;
+  }
+  if (dateStr < 10) {
+    dateStr = "0" + dateStr;
+  }
+
+  let str = `${yearStr}/${monthStr}/${dateStr}`;
+  return str;
+}

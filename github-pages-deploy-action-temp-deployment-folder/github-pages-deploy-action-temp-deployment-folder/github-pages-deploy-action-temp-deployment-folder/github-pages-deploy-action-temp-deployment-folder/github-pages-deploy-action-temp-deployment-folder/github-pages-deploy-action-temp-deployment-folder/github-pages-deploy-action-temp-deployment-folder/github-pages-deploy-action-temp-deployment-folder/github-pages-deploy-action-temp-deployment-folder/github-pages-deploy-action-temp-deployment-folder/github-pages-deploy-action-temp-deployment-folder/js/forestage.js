@@ -104,7 +104,19 @@ function renderCartList() {
           </div>
         </td>
         <td>NT$${price}</td>
-        <td>${item.quantity}</td>
+        <td>
+          <div class="d-flex align-items-center justify-content-space-around">
+            <span class="material-icons cart-icon" data-js="minus" data-cartid="${item.id}">
+              remove
+            </span>
+            <span>
+              ${item.quantity}
+            </span>
+            <span class="material-icons cart-icon" data-js="minus" data-cartid="${item.id}">
+              add
+            </span>
+          </div>
+        </td>
         <td>NT$${amount}</td>
         <td class="discardBtn">
           <a href="#" class="material-icons"> clear </a>
