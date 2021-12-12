@@ -187,3 +187,31 @@ function calcOrderDay(num) {
   let str = `${yearStr}/${monthStr}/${dateStr}`;
   return str;
 }
+
+// change order status
+function apiChangeOrderStatus(orderState, orderId) {
+  const url = `${baseUrl}/admin/${api_path}/orders`;
+
+  let obj = {
+    data: {
+      id: orderId,
+      paid: !orderState,
+    },
+  };
+  axios
+    .put(url, obj, config)
+    .then((res) => {
+      ordersData = res.data.orders;
+      renderOrder();
+      Swal.fire({
+        showConfirmButton: false,
+        confirmButtonColor: "#6A33F8",
+        title: "已更改訂單狀態！",
+        timer: 1200,
+        icon: "success",
+      });
+    })
+    .catch((err) => {
+      showError(err);
+    });
+}

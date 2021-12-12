@@ -118,3 +118,24 @@ function deleteAll() {
       console.log(err);
     });
 }
+
+/**
+ * submit order
+ */
+
+function submitOrder(orderConfig) {
+  const url = `${baseUrl}/customer/${api_path}/orders`;
+
+  axios
+    .post(url, orderConfig)
+    .then((res) => {
+      // cartListData = res.data;
+      // console.log(cartListData);
+      getCartList();
+      showSuccess("成功送出訂單！");
+      orderInfoForm.reset();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}

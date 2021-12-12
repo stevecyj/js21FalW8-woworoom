@@ -40,6 +40,6 @@ function getCartList() {
       renderCartList();
     })
     .catch((err) => {
-      console.log(error.response);
+      console.log(err);
     });
 }

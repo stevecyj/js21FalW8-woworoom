@@ -8,6 +8,7 @@ const shoppingCartTable = document.querySelector("#shoppingCart-table"); // cart
 const shoppingCartList = document.querySelector("#shoppingCartList"); // cart list
 const totalAmount = document.querySelector("#totalAmount"); // total amount
 const discardAllBtn = document.querySelector("#discardAllBtn"); // button to discard all products
+const cartStatus = document.querySelector("#cartStatus"); // show cart status
 
 // order from
 const orderInfoBtn = document.querySelector("#orderInfoBtn"); // submit button
@@ -155,40 +156,48 @@ function searchFilter(selected) {
 function renderCartList() {
   let carts = cartListData.carts;
   let cartsListStr = ``;
+  shoppingCartTable.classList.remove("d-none");
+
   let finalTotal = toThousandComma(cartListData.finalTotal);
 
-  carts.forEach((item) => {
-    let price = toThousandComma(item.product.price);
-    let amount = toThousandComma(item.product.price * item.quantity);
-    cartsListStr += `
-    <tr>
-        <td>
-          <div class="cardItem-title">
-            <img src="${item.product.images}" alt="產品照片" />
-            <p>${item.product.title}</p>
-          </div>
-        </td>
-        <td>NT$${price}</td>
-        <td>
-          <div class="d-flex align-items-center justify-content-space-around">
-            <span class="material-icons cart-icon" data-action="minus" data-count="remove" data-cartid="${item.id}">
-              remove
-            </span>
-            <span>
-              ${item.quantity}
-            </span>
-            <span class="material-icons cart-icon" data-action="plus" data-count="add" data-cartid="${item.id}">
-              add
-            </span>
-          </div>
-        </td>
-        <td>NT$${amount}</td>
-        <td class="discardBtn">
-          <a href="#" class="material-icons" data-action="remove" data-cartid="${item.id}"> clear </a>
-        </td>
-    </tr>
-    `;
-  });
+  if (carts.length > 0) {
+    cartStatus.innerHTML = "";
+    carts.forEach((item) => {
+      let price = toThousandComma(item.product.price);
+      let amount = toThousandComma(item.product.price * item.quantity);
+      cartsListStr += `
+      <tr>
+          <td>
+            <div class="cardItem-title">
+              <img src="${item.product.images}" alt="產品照片" />
+              <p>${item.product.title}</p>
+            </div>
+          </td>
+          <td>NT$${price}</td>
+          <td>
+            <div class="d-flex align-items-center justify-content-space-around">
+              <span class="material-icons cart-icon" data-action="minus" data-count="remove" data-cartid="${item.id}">
+                remove
+              </span>
+              <span>
+                ${item.quantity}
+              </span>
+              <span class="material-icons cart-icon" data-action="plus" data-count="add" data-cartid="${item.id}">
+                add
+              </span>
+            </div>
+          </td>
+          <td>NT$${amount}</td>
+          <td class="discardBtn">
+            <a href="#" class="material-icons" data-action="remove" data-cartid="${item.id}"> clear </a>
+          </td>
+      </tr>
+      `;
+    });
+  } else {
+    cartStatus.innerHTML = "購物車還沒有東西喔，來去逛逛吧 ～ ";
+    shoppingCartTable.classList.add("d-none");
+  }
 
   shoppingCartList.innerHTML = cartsListStr;
   totalAmount.innerHTML = `NT$${finalTotal}`;

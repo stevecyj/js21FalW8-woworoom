@@ -6,3 +6,22 @@ const config = {
     authorization: token,
   },
 };
+
+/**
+ * forestage
+ * get products
+ */
+
+function getProductsData() {
+  axios
+    .get(`${baseUrl}/customer/${api_path}/products`)
+    .then(function (res) {
+      productsData = res.data.products;
+      // console.log(productsData);
+      renderProducts(productsData);
+      renderOptions(productsData);
+    })
+    .catch(function (error) {
+      console.log(error.response);
+    });
+}
