@@ -62,6 +62,24 @@ function showConfirm(str) {
   });
 }
 
+function showAtLeastOne() {
+  Swal.fire({
+    icon: "warning",
+    showConfirmButton: false,
+    timer: 1500,
+    title: "商品數量最少1個！",
+  });
+}
+
+function showNone() {
+  Swal.fire({
+    icon: "warning",
+    showConfirmButton: false,
+    timer: 1500,
+    title: "購物車沒有商品！",
+  });
+}
+
 /**
  * 千分位
  */
@@ -215,7 +233,7 @@ function minusCart(cartId) {
       };
       calcCartListItemCount(calcConfig);
     } else if (item.id === cartId && item.quantity === 1) {
-      alert("請至少選擇一件商品");
+      showAtLeastOne();
     }
   });
 }
@@ -336,7 +354,7 @@ const constraints = {
 
 function bindCheck() {
   if (cartListData.carts == undefined || cartListData.carts.length === 0) {
-    alert("購物車內沒有商品");
+    showNone();
   } else {
     const tradeWay = document.querySelector("#tradeWay");
     let dataArr = [];
