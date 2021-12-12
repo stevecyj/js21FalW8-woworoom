@@ -5,7 +5,7 @@
 const orderBody = document.querySelector("#orderBody");
 const orderInfo = document.querySelector("#orderInfo");
 const orderPageTable = document.querySelector(".orderPage-table");
-const discardAllBtn = document.querySelector("#discardAllBtn");
+const discardAllOrderBtn = document.querySelector("#discardAllOrderBtn");
 
 // order data
 let ordersData = [];
@@ -41,6 +41,17 @@ function showDelConfirm() {
   return Swal.fire({
     confirmButtonText: `確定`,
     title: "確定要刪除這筆訂單嗎？",
+    showCancelButton: true,
+    cancelButtonText: "取消",
+    icon: "warning",
+    confirmButtonColor: "#6A33F8",
+  });
+}
+
+function showDelAllConfirm() {
+  return Swal.fire({
+    confirmButtonText: `確定`,
+    title: "確定要刪除所有訂單嗎？",
     showCancelButton: true,
     cancelButtonText: "取消",
     icon: "warning",
@@ -249,48 +260,58 @@ async function deleteOrderItem(orderId) {
 }
 
 //action DELETE 刪除全部訂單
-function deleteAllOrder(e) {
+async function deleteAllOrder(e) {
   e.preventDefault();
+
   if (ordersData.length === 0) {
     Swal.fire({
       title: "目前沒有訂單！",
       icon: "warning",
     });
   } else {
-    Swal.fire({
-      confirmButtonText: `確定`,
-      title: "確定要刪除所有訂單嗎？",
-      showCancelButton: true,
-      cancelButtonText: "取消",
-      icon: "warning",
-      confirmButtonColor: "#6A33F8",
-    }).then((result) => {
+    try {
+      let result = await showDelAllConfirm();
+      // console.log(result);
       if (result.isConfirmed) {
-        const url = `${apiPath}/admin/${myPath}/orders`;
-        axios
-          .delete(url, config)
-          .then((res) => {
-            if (res.data.status) {
-              Swal.fire({
-                title: `${res.data.message}`,
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-              ordersData = res.data.orders;
-              renderOrder();
-            }
-          })
-          .catch((err) => {
-            showError(err);
-          });
+        apiDeleteAllOrder();
       }
-    });
+    } catch (err) {
+      showError(err);
+    }
   }
+
+  // try {
+  //   let result = await showDelAllConfirm();
+  //   console.log(result);
+  //   if (result.isConfirmed) {
+  //     apiDeleteAllOrder();
+  //   }
+  // } catch (err) {
+  //   showError(err);
+  // }
+  // if (ordersData.length === 0) {
+  //   Swal.fire({
+  //     title: "目前沒有訂單！",
+  //     icon: "warning",
+  //   });
+  // } else {
+  //   Swal.fire({
+  //     confirmButtonText: `確定`,
+  //     title: "確定要刪除所有訂單嗎？",
+  //     showCancelButton: true,
+  //     cancelButtonText: "取消",
+  //     icon: "warning",
+  //     confirmButtonColor: "#6A33F8",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       apiDeleteAllOrder();
+  //     }
+  //   });
+  // }
 }
 
 // event listener
-discardAllBtn.addEventListener("click", deleteAllOrder);
+discardAllOrderBtn.addEventListener("click", deleteAllOrder);
 orderBody.addEventListener("click", doSomething);
 
 getOrderList();
