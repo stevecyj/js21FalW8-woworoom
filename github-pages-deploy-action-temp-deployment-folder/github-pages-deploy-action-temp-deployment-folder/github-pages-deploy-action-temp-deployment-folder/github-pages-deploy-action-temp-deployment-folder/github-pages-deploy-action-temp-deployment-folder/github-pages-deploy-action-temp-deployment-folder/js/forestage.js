@@ -36,6 +36,20 @@ function showSuccess(msg) {
   });
 }
 
+function showError(err) {
+  if (
+    err.response.status === 400 ||
+    err.response.status === 403 ||
+    err.response.status === 404
+  ) {
+    Swal.fire({
+      title: `${err.response.data.message}`,
+      icon: "error",
+      confirmButtonText: "確定",
+    });
+  }
+}
+
 function showConfirm(str) {
   return Swal.fire({
     title: "確定送出訂單嗎？",
@@ -46,9 +60,6 @@ function showConfirm(str) {
     confirmButtonColor: "#6A33F8",
     html: str,
   });
-}
-function callback() {
-  console.log("here");
 }
 
 /**
@@ -196,7 +207,7 @@ function minusCart(cartId) {
   // console.log(cartListData);
   cartListData.carts.forEach((item) => {
     if (item.id === cartId && item.quantity > 1) {
-      let calcConfig = {
+      const calcConfig = {
         data: {
           id: cartId,
           quantity: item.quantity - 1,
@@ -212,7 +223,7 @@ function minusCart(cartId) {
 function plusCart(cartId) {
   cartListData.carts.forEach((item) => {
     if (item.id === cartId) {
-      let calcConfig = {
+      const calcConfig = {
         data: {
           id: cartId,
           quantity: item.quantity + 1,
@@ -247,7 +258,7 @@ function addCartItem(e) {
   if (existProduct) {
     cartListData.carts.forEach((item) => {
       if (item.product.id === productId) {
-        let addConfig = {
+        const addConfig = {
           data: {
             productId: item.product.id,
             quantity: item.quantity + 1,
@@ -258,7 +269,7 @@ function addCartItem(e) {
     });
     // 商品不存在
   } else {
-    let addConfig = {
+    const addConfig = {
       data: {
         productId: productId,
         quantity: 1,
@@ -404,41 +415,21 @@ async function createOrder(dataArr) {
 
   // console.log(userData);
   try {
-    let res = await showConfirm(str);
-    console.log(res);
-  } catch (err) {}
-
-  // Swal.fire({
-  //   title: "確定送出訂單嗎？",
-  //   icon: "info",
-  //   showCancelButton: true,
-  //   confirmButtonText: `確認送出`,
-  //   cancelButtonText: `取消`,
-  //   confirmButtonColor: "#6A33F8",
-  //   html: str,
-  // }).then((result) => {
-  //   if (result.isConfirmed) {
-  //     const url = `${baseUrl}/customer/${api_path}/orders`;
-  //     const obj = {
-  //       data: {
-  //         user: {
-  //           ...userData,
-  //         },
-  //       },
-  //     };
-  //     axios
-  //       .post(url, obj)
-  //       .then((res) => {
-  //         // 刷新購物車
-  //         getCartList();
-  //         showSuccess("成功送出訂單！");
-  //         orderInfoForm.reset();
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // });
+    let result = await showConfirm(str);
+    // console.log(result);
+    if (result.isConfirmed) {
+      const orderConfig = {
+        data: {
+          user: {
+            ...userData,
+          },
+        },
+      };
+      submitOrder(orderConfig);
+    }
+  } catch (err) {
+    showError(err);
+  }
 }
 
 /**

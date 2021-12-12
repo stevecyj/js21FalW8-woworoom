@@ -36,7 +36,25 @@ function getCartList() {
     .get(url)
     .then((res) => {
       cartListData = res.data;
-      console.log(cartListData);
+      // console.log(cartListData);
+      renderCartList();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+/**
+ * calc cart list item count
+ */
+
+function calcCartListItemCount() {
+  const url = `${baseUrl}/customer/${api_path}/carts`;
+  axios
+    .patch(url, calcConfig)
+    .then((res) => {
+      cartListData = res.data;
+      // console.log(cartListData);
       renderCartList();
     })
     .catch((err) => {

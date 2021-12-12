@@ -69,3 +69,12 @@
 .overflowWrap {
   overflow-x: scroll;
 }
+
+.order-info {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  color: #6a33f8;
+  text-decoration: none;
+  font-size: 24px;
+}

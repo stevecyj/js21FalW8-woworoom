@@ -133,13 +133,51 @@ function renderCartList() {
  * event listener for click
  */
 
-function orderCart(e) {
+function actionCart(e) {
   e.preventDefault();
   const action = e.target.getAttribute("data-action");
-  console.log(action);
+  const cartId = e.target.getAttribute("data-cartid");
+  // console.log(action);
+  switch (action) {
+    case "minus":
+      minusCart(cartId);
+      break;
+
+    case "plus":
+      plusCart(cartId);
+      break;
+
+    case "remove":
+      removeCart(cartId);
+      break;
+
+    default:
+      break;
+  }
 }
 
-shoppingCartTable.addEventListener("click", orderCart);
+function minusCart(cartId) {
+  // console.log(cartListData);
+  cartListData.carts.forEach((item) => {
+    if (item.id === cartId && item.quantity > 1) {
+      let calcConfig = {
+        data: {
+          id: cartId,
+          quantity: item.quantity - 1,
+        },
+      };
+      calcCartListItemCount(calcConfig);
+    } else if (item.id === cartId && item.quantity === 1) {
+      alert("請至少選擇一件商品");
+    }
+  });
+}
+
+function plusCart(cartId) {}
+
+function removeCart(cartId) {}
+
+shoppingCartTable.addEventListener("click", actionCart);
 
 /**
  * initial

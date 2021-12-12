@@ -90,6 +90,7 @@ function searchFilter(selected) {
 function renderCartList() {
   let carts = cartListData.carts;
   let cartsListStr = ``;
+  let finalTotal = toThousandComma(cartListData.finalTotal);
 
   carts.forEach((item) => {
     let price = toThousandComma(item.product.price);
@@ -113,6 +114,7 @@ function renderCartList() {
   });
 
   shoppingCartList.innerHTML = cartsListStr;
+  totalAmount.innerHTML = `NT$${finalTotal}`;
 }
 
 /**

@@ -37,6 +37,17 @@ function showError(err) {
   }
 }
 
+function showDelConfirm() {
+  return Swal.fire({
+    confirmButtonText: `確定`,
+    title: "確定要刪除這筆訂單嗎？",
+    showCancelButton: true,
+    cancelButtonText: "取消",
+    icon: "warning",
+    confirmButtonColor: "#6A33F8",
+  });
+}
+
 /**
  * C3.js
  */
@@ -153,31 +164,35 @@ function renderOrder() {
         productsStr += `<li>${products.title}：${products.quantity}</li>`;
       });
 
-      str += `  <tr>
-      <td>${item.createdAt}</td>
-      <td>
-          <p>${item.user.name}</p>
-          <p>${item.user.tel}</p>
-      </td>
-      <td>${item.user.address}</td>
-      <td>${item.user.email}</td>
-      <td>
-        <ul>
-          ${productsStr}
-        </ul>
-      </td>
-      <td>${timeStr}</td>
-      <td class="orderStatus">
-          <a href="#" class="orderStatus-Btn" data-id="${
-            item.id
-          }" data-state="${item.paid}">${item.paid ? `已處理` : `未處理`}</a>
-      </td>
-      <td>
-          <input type="button" class="delSingleOrder-Btn" data-id="${
-            item.id
-          }"value="刪除">
-      </td>
-  </tr>`;
+      str += `
+      <tr>
+          <td>${item.createdAt}</td>
+          <td>
+              <p>${item.user.name}</p>
+              <p>${item.user.tel}</p>
+          </td>
+          <td>${item.user.address}</td>
+          <td>${item.user.email}</td>
+          <td>
+            <ul>
+              ${productsStr}
+            </ul>
+          </td>
+          <td>${timeStr}</td>
+          <td class="orderStatus">
+              <a href="#" class="orderStatus-Btn" data-id="${
+                item.id
+              }" data-state="${item.paid}">${
+        item.paid ? `已處理` : `未處理`
+      }</a>
+          </td>
+          <td>
+              <input type="button" class="delSingleOrder-Btn" data-id="${
+                item.id
+              }"value="刪除">
+          </td>
+      </tr>
+      `;
     });
     // console.log(str);
     orderBody.innerHTML = str;
@@ -219,35 +234,18 @@ function editOrder(orderState, orderId) {
   apiChangeOrderStatus(orderState, orderId);
 }
 
-//action DELETE 刪除特定訂單
-function deleteOrderItem(orderId) {
-  Swal.fire({
-    confirmButtonColor: "#6A33F8",
-    cancelButtonText: "取消",
-    showCancelButton: true,
-    title: "確定要刪除該訂單嗎？",
-    confirmButtonText: `確定`,
-    icon: "warning",
-  }).then((result) => {
+//action DELETE delete specific order
+async function deleteOrderItem(orderId) {
+  try {
+    let result = await showDelConfirm();
+    // console.log(result);
     if (result.isConfirmed) {
-      const url = `${apiPath}/admin/${myPath}/orders/${orderId}`;
-      axios
-        .delete(url, config)
-        .then((res) => {
-          ordersData = res.data.orders;
-          renderOrder();
-          Swal.fire({
-            showConfirmButton: false,
-            timer: 1500,
-            title: "已刪除訂單！",
-            icon: "success",
-          });
-        })
-        .catch((err) => {
-          showError(err);
-        });
+      // console.log("123");
+      apiDeleteOrder(orderId);
     }
-  });
+  } catch (err) {
+    showError(err);
+  }
 }
 
 //action DELETE 刪除全部訂單

@@ -223,13 +223,35 @@ function apiDeleteOrder(orderId) {
     .delete(url, config)
     .then((res) => {
       ordersData = res.data.orders;
-      renderOrder();
       Swal.fire({
         showConfirmButton: false,
         timer: 1500,
         title: "已刪除訂單！",
         icon: "success",
       });
+      renderOrder();
+    })
+    .catch((err) => {
+      showError(err);
+    });
+}
+
+// delete all order
+function apiDeleteAllOrder() {
+  const url = `${baseUrl}/admin/${api_path}/orders`;
+  axios
+    .delete(url, config)
+    .then((res) => {
+      if (res.data.status) {
+        Swal.fire({
+          title: `${res.data.message}`,
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        ordersData = res.data.orders;
+        renderOrder();
+      }
     })
     .catch((err) => {
       showError(err);

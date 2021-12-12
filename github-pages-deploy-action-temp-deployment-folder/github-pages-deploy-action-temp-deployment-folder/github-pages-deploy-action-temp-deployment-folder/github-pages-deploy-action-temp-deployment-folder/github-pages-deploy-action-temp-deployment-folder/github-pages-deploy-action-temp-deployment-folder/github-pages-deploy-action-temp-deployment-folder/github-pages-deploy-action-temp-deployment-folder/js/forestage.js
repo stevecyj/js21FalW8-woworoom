@@ -7,6 +7,7 @@ const productSelect = document.querySelector("#productSelect"); // dropdown sele
 const shoppingCartTable = document.querySelector("#shoppingCart-table"); // cart table
 const shoppingCartList = document.querySelector("#shoppingCartList"); // cart list
 const totalAmount = document.querySelector("#totalAmount"); // total amount
+const discardAllBtn = document.querySelector("#discardAllBtn"); // button to discard all products
 
 /**
  * data
@@ -233,10 +234,20 @@ function addCartItem(e) {
 }
 
 /**
+ * remove all items from cart
+ */
+
+function removeAllCart(e) {
+  e.preventDefault();
+  deleteAll();
+}
+
+/**
  * event listener for click
  */
 shoppingCartTable.addEventListener("click", actionCart);
 productsWrap.addEventListener("click", addCartItem);
+discardAllBtn.addEventListener("click", removeAllCart);
 
 /**
  * initial

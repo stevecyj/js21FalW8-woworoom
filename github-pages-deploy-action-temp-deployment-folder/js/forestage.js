@@ -442,6 +442,7 @@ async function createOrder(dataArr) {
 
   // console.log(userData);
   try {
+    // console.log("123");
     let result = await showConfirm(str);
     // console.log(result);
     if (result.isConfirmed) {

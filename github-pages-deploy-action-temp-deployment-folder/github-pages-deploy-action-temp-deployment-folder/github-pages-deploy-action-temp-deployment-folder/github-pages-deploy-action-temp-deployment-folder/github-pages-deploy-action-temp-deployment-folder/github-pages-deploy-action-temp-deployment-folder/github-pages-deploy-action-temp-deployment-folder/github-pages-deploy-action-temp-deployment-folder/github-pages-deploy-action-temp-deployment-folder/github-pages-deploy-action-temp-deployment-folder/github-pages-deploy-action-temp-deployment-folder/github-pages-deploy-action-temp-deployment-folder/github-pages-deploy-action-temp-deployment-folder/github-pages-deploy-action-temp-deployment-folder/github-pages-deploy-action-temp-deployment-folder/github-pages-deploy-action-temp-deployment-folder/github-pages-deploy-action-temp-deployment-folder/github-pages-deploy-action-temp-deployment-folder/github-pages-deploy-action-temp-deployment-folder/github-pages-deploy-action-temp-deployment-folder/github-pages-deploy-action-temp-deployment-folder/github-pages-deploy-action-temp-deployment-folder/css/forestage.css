@@ -576,14 +576,14 @@ body {
   text-align: left;
 }
 
-.shoppingCart-table tbody tr {
+.shoppingCart-table tr {
   border-bottom: 1px solid #b9b9b9;
 }
 
-/* .shoppingCart-table tr:first-child,
+.shoppingCart-table tr:first-child,
 .shoppingCart-table tr:last-child {
   border-bottom: 0;
-} */
+}
 
 @media (max-width: 767px) {
   .shoppingCart-table {
@@ -794,24 +794,5 @@ body {
 
 .orderTableWrap::-webkit-scrollbar {
   display: none;
-}
-
-.titleOverFlow {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.cart-status {
-  display: block;
-  text-align: center;
-  margin: 0 auto;
-  color: #6a33f8;
-  text-decoration: none;
-  font-size: 24px;
-}
-.cart-status:hover {
-  color: #9d7eeb;
-  /* text-decoration: underline; */
 }
 /*# sourceMappingURL=all.css.map */
