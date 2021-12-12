@@ -159,7 +159,7 @@ function getOrderList() {
     .get(url, config)
     .then((res) => {
       ordersData = res.data.orders;
-      console.log(ordersData);
+      // console.log(ordersData);
       renderOrder();
     })
     .catch((err) => {
@@ -207,7 +207,27 @@ function apiChangeOrderStatus(orderState, orderId) {
         showConfirmButton: false,
         confirmButtonColor: "#6A33F8",
         title: "已更改訂單狀態！",
-        timer: 1200,
+        timer: 1500,
+        icon: "success",
+      });
+    })
+    .catch((err) => {
+      showError(err);
+    });
+}
+
+// delete specific order
+function apiDeleteOrder(orderId) {
+  const url = `${baseUrl}/admin/${api_path}/orders/${orderId}`;
+  axios
+    .delete(url, config)
+    .then((res) => {
+      ordersData = res.data.orders;
+      renderOrder();
+      Swal.fire({
+        showConfirmButton: false,
+        timer: 1500,
+        title: "已刪除訂單！",
         icon: "success",
       });
     })
